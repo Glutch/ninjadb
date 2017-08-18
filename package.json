@@ -1,0 +1,16 @@
+{
+  "name": "ninjadb",
+  "version": "1.8.0",
+  "description": "",
+  "main": "db.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "glutchpls",
+  "license": "ISC",
+  "dependencies": {
+    "lowdb": "^0.16.2",
+    "underscore": "^1.8.3",
+    "uuid": "^3.1.0"
+  }
+}
