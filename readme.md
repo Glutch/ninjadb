@@ -1,6 +1,6 @@
-##ninjadb, a super simple json database
+## ninjadb, a super simple json database
 
-###a wrapper for lowdb to make it easier. For use in tiny projects.
+### a wrapper for lowdb to make it easier. For use in tiny projects.
 
 
 install
