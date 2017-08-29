@@ -1,15 +1,15 @@
 ## ninjadb, a super simple json database
 
-### a wrapper for lowdb to make it easier. For use in tiny projects.
+#### ninjadb is a wrapper for lowdb to make it easier. For use in tiny projects.
 
 
-install
+## install
 ```
 npm install ninjadb --save
 ```
 
-usage
-```
+## usage
+```javascript
 const ninjadb = require('ninjadb')
 const users = ninjadb.create('users')
 

@@ -8,21 +8,27 @@ exports.create = name => {
   const dbname = 'data'
   db.defaults({ data: [] }).write()
   
-  const options = settings => {
-    _id = settings.id
+  const settings = {
+    _id: false,
+    crypt: false
+  }
+  
+  const options = data => {
+    settings._id = data.id
   }
 
   const push = data => {
-    if(_id) data.id = uuid()
+    if(settings._id) data.id = uuid()
     db.get(dbname).push(data).write()
   }
 
   const update = (target, data) => {
-    if(_id) data.id = uuid()
+    if(settings._id) data.id = uuid()
     db.get(dbname).find(target).assign(data).write()
   }
 
   const find = target => {
+    if(!target) return db.get(dbname).value()
     return db.get(dbname).find(target).value()
   }
 
