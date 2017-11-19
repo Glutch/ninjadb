@@ -2,47 +2,49 @@ const low = require('lowdb')
 const _   = require('underscore')
 const uuid = require('uuid')
 
-exports.create = name => {
-  let _id = false
+const defaultSettings = {
+  useId: false,
+  crypt: false
+}
+
+exports.create = (name, _settings) => {
   const db = low(name + '.json')
-  const dbname = 'data'
   db.defaults({ data: [] }).write()
-  
-  const settings = {
-    _id: false,
-    crypt: false
-  }
-  
-  const options = data => {
-    settings._id = data.id
+  const coll = db.get('data')
+
+  const settings = Object.assign({}, defaultSettings, _settings)
+
+  const push = (item) => {
+    if (settings.useId) {
+      item.id = uuid()
+    }
+    coll.push(item).write()
   }
 
-  const push = data => {
-    if(settings._id) data.id = uuid()
-    db.get(dbname).push(data).write()
+  const insert = (items) => {
+    items.forEach(push)
   }
 
-  const update = (target, data) => {
-    if(settings._id) data.id = uuid()
-    db.get(dbname).find(target).assign(data).write()
+  const update = (target, item) => {
+    coll.find(target).assign(item).write()
   }
 
   const find = target => {
-    if(!target) return db.get(dbname).value()
-    return db.get(dbname).find(target).value()
+    if(!target) return coll.value()
+    return coll.find(target).value()
   }
 
   const remove = target => {
-    db.get(dbname).remove(target).write()
+    coll.remove(target).write()
   }
-  
-  const upsert = (target, data) => {
+
+  const upsert = (target, item) => {
     if(!find(target)){
-      push(data)
+      push(item)
     } else {
-      update(target, data)
+      update(target, item)
     }
   }
 
-  return { push, update, find, remove, upsert, options }
+  return {push, insert, update, find, remove, upsert}
 }

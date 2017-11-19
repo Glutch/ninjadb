@@ -38,5 +38,5 @@ users.upsert({
 users.find({ name: 'ninja' })
 
 //you can also activate id's with
-users.options({ id: true })
+const users = ninjadb.create('users', {useId: true})
 ```
