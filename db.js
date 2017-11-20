@@ -48,3 +48,28 @@ exports.create = (name, _settings) => {
 
   return {push, insert, update, find, remove, upsert}
 }
+
+exports.createKeyValueStore = (name) => {
+  const db = low(name + '.json')
+  db.defaults({data: [{}]}).write()
+  const valueByKey = db.get('data').find({})
+
+  const get = () => {
+    return valueByKey.value()
+  }
+
+  const update = (item) => {
+    valueByKey.assign(item).write()
+  }
+
+  const set = (item) => {
+    const values = get()
+    const undefinedByKey = Object.keys(values).reduce((prev, key) => {
+      return Object.assign({}, prev, {[key]: undefined})
+    }, {})
+    update(undefinedByKey)
+    update(item)
+  }
+
+  return {get, update, set}
+}
