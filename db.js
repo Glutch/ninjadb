@@ -34,6 +34,10 @@ exports.create = (name, _settings) => {
     return coll.find(target).value()
   }
 
+  const filter = target => {
+    return coll.filter(target).value()
+  }
+
   const remove = target => {
     coll.remove(target).write()
   }
@@ -46,7 +50,7 @@ exports.create = (name, _settings) => {
     }
   }
 
-  return {push, insert, update, find, remove, upsert}
+  return {push, insert, update, find, filter, remove, upsert}
 }
 
 exports.createKeyValueStore = (name) => {
