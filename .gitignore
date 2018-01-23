@@ -1,5 +1,4 @@
 node_modules
-package-lock.json
 app.js
 db.json
 old*
