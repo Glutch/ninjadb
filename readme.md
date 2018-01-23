@@ -5,7 +5,7 @@
 
 ## install
 ```
-npm install ninjadb --save
+npm install ninjadb
 ```
 
 ## usage
@@ -35,7 +35,9 @@ users.upsert({
   pass: 'example'
 })
 
-users.find({ name: 'ninja' })
+users.find({ name: 'ninja' }) // one ninja
+
+users.filter({ name: 'ninja' }) // all ninjas
 
 //you can also activate id's with
 const users = ninjadb.create('users', {useId: true})
