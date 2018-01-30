@@ -1,18 +1,39 @@
 const low = require('lowdb')
 const _   = require('underscore')
 const uuid = require('uuid')
+const path = require('path')
+const fs = require('fs')
+const os = require('os')
+const package = require('./package.json')
+
+const dbPath = path.join(os.homedir(), '/.ninjadb/' + package.name)
 
 const defaultSettings = {
   useId: false,
-  crypt: false
+  crypt: false,
+  electron: false,
+  path: ''
 }
 
 exports.create = (name, _settings) => {
-  const db = low(name + '.json')
+  const settings = Object.assign({}, defaultSettings, _settings)
+  let db = null
+
+  if (settings.electron) {
+    if (!fs.existsSync(dbPath)){
+      fs.mkdirSync(dbPath)
+    }
+    db = low(dbPath + '/' + name + '.json')
+  } else {
+    const normalPath = __dirname + '/' + settings.path
+    if (!fs.existsSync(normalPath)){
+      fs.mkdirSync(normalPath)
+    }
+    db = low(path.join(normalPath, name) + '.json')
+  }
+
   db.defaults({ data: [] }).write()
   const coll = db.get('data')
-
-  const settings = Object.assign({}, defaultSettings, _settings)
 
   const push = (item) => {
     if (settings.useId) {
