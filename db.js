@@ -6,7 +6,7 @@ const fs = require('fs')
 const os = require('os')
 const package = require('./package.json')
 
-const dbPath = path.join(os.homedir(), '/.ninjadb/' + package.name)
+const dbPath = path.join(os.homedir(), '/.ninjadb')
 
 const defaultSettings = {
   useId: false,
@@ -17,20 +17,14 @@ const defaultSettings = {
 
 exports.create = (name, _settings) => {
   const settings = Object.assign({}, defaultSettings, _settings)
-  let db = null
 
-  if (settings.electron) {
-    if (!fs.existsSync(dbPath)){
-      fs.mkdirSync(dbPath)
-    }
-    db = low(dbPath + '/' + name + '.json')
-  } else {
-    const normalPath = __dirname + '/' + settings.path
-    if (!fs.existsSync(normalPath)){
-      fs.mkdirSync(normalPath)
-    }
-    db = low(path.join(normalPath, name) + '.json')
+  const dir = settings.electron ? path.join(dbPath, settings.path) : path.join(__dirname, settings.path)
+
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir)
   }
+
+  const db = low(path.join(dir, name) + '.json')
 
   db.defaults({ data: [] }).write()
   const coll = db.get('data')
