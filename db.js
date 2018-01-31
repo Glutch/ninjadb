@@ -18,6 +18,10 @@ const defaultSettings = {
 exports.create = (name, _settings) => {
   const settings = Object.assign({}, defaultSettings, _settings)
 
+  if (!fs.existsSync(dbPath)){
+    fs.mkdirSync(dbPath)
+  }
+
   const dir = settings.electron ? path.join(dbPath, settings.path) : path.join(__dirname, settings.path)
 
   if (!fs.existsSync(dir)){

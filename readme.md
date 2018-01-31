@@ -39,6 +39,15 @@ users.find({ name: 'ninja' }) // one ninja
 
 users.filter({ name: 'ninja' }) // all ninjas
 
-//you can also activate id's with
+//option: enable ids
 const users = ninjadb.create('users', {useId: true})
+
+//option: puts your db.json in __dirname/db
+const users = ninjadb.create('users', {path: 'db'})
+
+//option: puts your db.json in /user/.ninjadb
+const users = ninjadb.create('users', {electron: true})
+
+//option: puts your db.json in /user/.ninjadb/db
+const users = ninjadb.create('users', {electron: true, path: 'db'})
 ```
