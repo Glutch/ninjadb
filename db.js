@@ -1,10 +1,9 @@
 const low = require('lowdb')
-const _   = require('underscore')
+const _ = require('underscore')
 const uuid = require('uuid')
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
-const package = require('./package.json')
 
 const dbPath = path.join(os.homedir(), '/.ninjadb')
 
@@ -15,16 +14,20 @@ const defaultSettings = {
   path: ''
 }
 
+console.log(__dirname)
+
 exports.create = (name, _settings) => {
   const settings = Object.assign({}, defaultSettings, _settings)
 
-  if (!fs.existsSync(dbPath)){
+  if (!fs.existsSync(dbPath)) {
     fs.mkdirSync(dbPath)
   }
 
-  const dir = settings.electron ? path.join(dbPath, settings.path) : path.join(__dirname, settings.path)
+  const dir = settings.electron
+    ? path.join(dbPath, settings.path)
+    : path.join(__dirname, '../../', settings.path)
 
-  if (!fs.existsSync(dir)){
+  if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
 
@@ -33,14 +36,14 @@ exports.create = (name, _settings) => {
   db.defaults({ data: [] }).write()
   const coll = db.get('data')
 
-  const push = (item) => {
+  const push = item => {
     if (settings.useId) {
       item.id = uuid()
     }
     coll.push(item).write()
   }
 
-  const insert = (items) => {
+  const insert = items => {
     items.forEach(push)
   }
 
@@ -69,10 +72,10 @@ exports.create = (name, _settings) => {
     }
   }
 
-  return {push, insert, update, find, filter, remove, upsert}
+  return { push, insert, update, find, filter, remove, upsert }
 }
 
-exports.createKeyValueStore = (name) => {
+exports.createKeyValueStore = name => {
   const db = low(name + '.json')
   db.defaults({data: [{}]}).write()
   const valueByKey = db.get('data').find({})
@@ -81,11 +84,11 @@ exports.createKeyValueStore = (name) => {
     return valueByKey.value()
   }
 
-  const update = (item) => {
+  const update = item => {
     valueByKey.assign(item).write()
   }
 
-  const set = (item) => {
+  const set = item => {
     const values = get()
     const undefinedByKey = Object.keys(values).reduce((prev, key) => {
       return Object.assign({}, prev, {[key]: undefined})
@@ -94,5 +97,5 @@ exports.createKeyValueStore = (name) => {
     update(item)
   }
 
-  return {get, update, set}
+  return { get, update, set }
 }
