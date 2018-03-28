@@ -14,8 +14,6 @@ const defaultSettings = {
   path: ''
 }
 
-console.log(__dirname)
-
 exports.create = (name, _settings) => {
   const settings = Object.assign({}, defaultSettings, _settings)
 
