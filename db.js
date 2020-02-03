@@ -1,5 +1,6 @@
 const low = require('lowdb')
 const uuid = require('uuid')
+const fs = require('fs')
 
 const defaultSettings = {
   useId: false,
@@ -8,8 +9,11 @@ const defaultSettings = {
 exports.create = (path, _settings) => {
   const settings = Object.assign({}, defaultSettings, _settings)
 
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path)
+  if (path.lastIndexOf('/') > 1) {
+    const _path = path.slice(0, path.lastIndexOf('/'))
+    if (!fs.existsSync(_path)) {
+      fs.mkdirSync(_path)
+    }
   }
 
   const db = low(path)

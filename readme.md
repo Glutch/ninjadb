@@ -11,7 +11,7 @@ npm install ninjadb
 ## usage
 ```javascript
 const ninjadb = require('ninjadb')
-const users = ninjadb.create('users')
+const users = ninjadb.create('users.json')
 
 users.push({
   name: 'ninja',
@@ -42,12 +42,6 @@ users.filter({ name: 'ninja' }) // all ninjas
 //option: enable ids
 const users = ninjadb.create('users', {useId: true})
 
-//option: puts your db.json in __dirname/db
-const users = ninjadb.create('users', {path: 'db'})
-
-//option: puts your db.json in /user/.ninjadb
-const users = ninjadb.create('users', {electron: true})
-
-//option: puts your db.json in /user/.ninjadb/db
-const users = ninjadb.create('users', {electron: true, path: 'db'})
+//optional: store your data in another location
+const users = ninjadb.create('../data/users.json')
 ```
