@@ -8,6 +8,10 @@ const defaultSettings = {
 exports.create = (path, _settings) => {
   const settings = Object.assign({}, defaultSettings, _settings)
 
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path)
+  }
+
   const db = low(path)
 
   db.defaults({ data: [] }).write()
